@@ -41,7 +41,7 @@ pipeline {
           steps {
             unstash 'code'
             sh 'ci/unit-test-app.sh'
-            junit 'app/build/test-results/test/TEST.xml'
+            junit 'app/build/test-results/test/TEST-*.xml'
             stash(excludes: '.git', name: 'code')
           }
         }
