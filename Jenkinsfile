@@ -4,7 +4,7 @@ pipeline {
     stage('Clone Down') {
       steps {
         sh 'echo "yellow ornage"'
-        stash 'excludes: \'.git/*\', name: \'code\''
+        stash(excludes: '.git', name: 'code')
       }
     }
 
