@@ -4,7 +4,7 @@ pipeline {
     stage('Clone Down') {
       steps {
         sh 'echo "yellow ornage"'
-        stash(excludes: '.git/*', name: 'code')
+        stash 'excludes: \'.git/*\', name: \'code\''
       }
     }
 
@@ -23,9 +23,6 @@ pipeline {
             }
 
           }
-          options {
-            skipDefaultCheckout(true)
-          }
           steps {
             unstash 'code'
             sh 'ci/build-app.sh'
@@ -40,9 +37,6 @@ pipeline {
             }
 
           }
-          options {
-            skipDefaultCheckout(true)
-          }
           steps {
             unstash 'code'
             sh 'ci/unit-test-app.sh'
@@ -53,5 +47,20 @@ pipeline {
       }
     }
 
+    stage('push docker app') {
+      environment {
+        DOCKERCREDS = credentials('docker_login')
+      }
+      steps {
+        unstash 'code'
+        sh 'ci/build-docker.sh'
+        sh 'echo "$DOCKERCREDS_PSW" | docker login -u" $DOCKERCREDS_USR" --password-stdin'
+        sh 'ci/push-docker.sh'
+      }
+    }
+
+  }
+  environment {
+    docker_username = 'nissero'
   }
 }
