@@ -49,9 +49,6 @@ pipeline {
     }
 
     stage('build docker app') {
-      environment {
-        DOCKERCREDS = credentials('docker_login')
-      }
       steps {
         unstash 'code'
         sh 'ci/build-docker.sh'
@@ -62,6 +59,9 @@ pipeline {
     stage('Master branch build') {
       when {
         branch 'master'
+      }
+      environment {
+        DOCKERCREDS = credentials('docker_login')
       }
       steps {
         unstash 'code'
