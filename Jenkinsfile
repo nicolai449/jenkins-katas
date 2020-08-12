@@ -9,12 +9,6 @@ pipeline {
 
     stage('Parallel Execution') {
       parallel {
-        stage('Say Hello') {
-          steps {
-            sh 'echo "hello world"'
-          }
-        }
-
         stage('build app') {
           agent {
             docker {
@@ -73,7 +67,10 @@ pipeline {
 
     stage('Component test') {
       when {
-        branch pattern: '/dev', comparator: 'GLOB'
+        not {
+          branch pattern: '/dev', comparator: 'GLOB'
+        }
+
       }
       steps {
         unstash 'code'
