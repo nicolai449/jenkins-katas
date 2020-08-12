@@ -2,15 +2,9 @@ pipeline {
   agent any
   stages {
     stage('Clone Down') {
-      agent {
-        node {
-          label 'host'
-        }
-
-      }
       steps {
         sh 'echo "yellow ornage"'
-        stash(name: 'code', excludes: '.git')
+        stash 'excludes: \'.git/*\', name: \'code\''
       }
     }
 
