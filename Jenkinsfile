@@ -28,6 +28,7 @@ pipeline {
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
             skipDefaultCheckout true
+            stash(excludes: '.git', name: 'code')
           }
         }
 
