@@ -3,7 +3,6 @@ pipeline {
   stages {
     stage('Clone Down') {
       steps {
-        sh 'echo "yellow ornage"'
         stash(excludes: '.git', name: 'code')
       }
     }
@@ -43,6 +42,7 @@ pipeline {
             unstash 'code'
             sh 'ci/unit-test-app.sh'
             junit 'app/build/test-results/test/TEST-.xml'
+            stash(excludes: '.git', name: 'code')
           }
         }
 
